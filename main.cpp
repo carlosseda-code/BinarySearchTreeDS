@@ -11,7 +11,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
-#include <set>
+#include <map>
 using namespace std;
 
 // Nodo del arbol binario
@@ -171,7 +171,7 @@ public:
        if(r != NULL){
             postorder(r->left);
             postorder(r->right);
-           // cout << r->data << " Accesos: " << r->repeticiones << endl;
+           //cout << r->data << " Accesos: " << r->repeticiones << endl;
         }
     }
 };
@@ -187,31 +187,36 @@ void merge(vector<node>& izquierda, vector<node>& derecha, vector<node>& v);
 int main(int argc, const char * argv[]) {
     BST arbol;
     vector<node> v;
+    map<int, int> mymap;
     lecturaVariables(v, arbol);
     arbol.postorder(arbol.root);
     ordenaMerge(v);
     int n = v.size() - 1, i = 1;
     if(n > 5){
         cout << "Puerto: " << v[n].data << " Accesos: "<< v[n].repeticiones << endl;
+        mymap[v[n].data] = 1;
         n--;
         while(i < 5){
-            if(v[n].data != v[n+1].data){
+            if(mymap[v[n].data] == 0){
             cout << "Puerto: " << v[n].data << " Accesos: "<< v[n].repeticiones << endl;
             arbol.del(v[n].data);
             i++;
             }
+            mymap[v[n].data]++;
             n--;
             if(n < 0)
                 break;
         }
-    } else if(n > 0 && n < 5){
+    } else {
         cout << "Puerto: " << v[n].data << " Accesos: "<< v[n].repeticiones << endl;
+        mymap[v[n].data] = 1;
         n--;
         while(n > 0){
-            if(v[n].data != v[n+1].data){
+            if(mymap[v[n].data] == 0){
             cout << "Puerto: " << v[n].data << " Accesos: "<< v[n].repeticiones << endl;
             arbol.del(v[n].data);
             }
+            mymap[v[n].data]++;
             n--;
         }
     }
